@@ -1,0 +1,569 @@
+{
+  "info": {
+    "name": "Server API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000" },
+    { "key": "jwt_token", "value": "" },
+    { "key": "stripe_signature", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\":\"Juan\",\"apellido\":\"Pérez\",\"email\":\"juan.perez@example.com\",\"telefono\":\"+34123456789\",\"ssn\":\"123-45-6789\",\"password\":\"secret123\"}"
+            },
+            "url": { "raw": "{{base_url}}/auth/register" }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"juan.perez@example.com\",\"password\":\"secret123\"}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login" }
+          }
+        },
+        {
+          "name": "Google Auth",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/auth/google" }
+          }
+        },
+        {
+          "name": "Google Callback",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/auth/google/redirect" }
+          }
+        },
+        {
+          "name": "Send Contract",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"recipientName\": \"Juan Pérez\", \"recipientEmail\": \"juan.perez@example.com\", \"returnUrl\": \"http://localhost:3000/return\" }"
+            },
+            "url": { "raw": "{{base_url}}/contracts/:id/send" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\":\"Juan\",\"apellido\":\"Pérez\",\"email\":\"juan.perez@example.com\",\"telefono\":\"+34123456789\",\"ssn\":\"123-45-6789\",\"password\":\"secret123\"}"
+            },
+            "url": { "raw": "{{base_url}}/users" }
+          }
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/users" }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/users/:id" }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"apellido\":\"García\"}"
+            },
+            "url": { "raw": "{{base_url}}/users/:id" }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/users/:id" }
+          }
+        },
+        {
+          "name": "Send Phone Verification Code",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/users/:id/phone/send-code" }
+          }
+        },
+        {
+          "name": "Verify Phone Code",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"code\":\"12345\"}"
+            },
+            "url": { "raw": "{{base_url}}/users/:id/phone/verify-code" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Service Categories",
+      "item": [
+        {
+          "name": "Create Service Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"name\":\"Limpieza\",\"description\":\"Servicios de limpieza\"}" },
+            "url": { "raw": "{{base_url}}/service-categories" }
+          }
+        },
+        {
+          "name": "Get All Service Categories",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ],
+            "url": { "raw": "{{base_url}}/service-categories" }
+          }
+        },
+        {
+          "name": "Get Service Category by ID",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ],
+            "url": { "raw": "{{base_url}}/service-categories/:id" }
+          }
+        },
+        {
+          "name": "Update Service Category",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"name\":\"Limpieza Express\"}" },
+            "url": { "raw": "{{base_url}}/service-categories/:id" }
+          }
+        },
+        {
+          "name": "Delete Service Category",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ],
+            "url": { "raw": "{{base_url}}/service-categories/:id" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "item": [
+        {
+          "name": "Create Service",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"name\":\"Limpieza profunda\",\"description\":\"Incluye ventanas y suelos\",\"categoryId\":\"uuid-de-categoria\",\"basePrice\":20.5}" },
+            "url": { "raw": "{{base_url}}/services" }
+          }
+        },
+        {
+          "name": "Get All Services",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ],
+            "url": { "raw": "{{base_url}}/services" }
+          }
+        },
+        {
+          "name": "Get Service by ID",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ],
+            "url": { "raw": "{{base_url}}/services/:id" }
+          }
+        },
+        {
+          "name": "Update Service",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"basePrice\":25}" },
+            "url": { "raw": "{{base_url}}/services/:id" }
+          }
+        },
+        {
+          "name": "Delete Service",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ],
+            "url": { "raw": "{{base_url}}/services/:id" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Service Options",
+      "item": [
+        {
+          "name": "Create Service Option",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"name\":\"Ventanas\",\"description\":\"Limpieza de ventanas\",\"serviceId\":\"uuid-de-servicio\",\"extraPrice\":5.0}" },
+            "url": { "raw": "{{base_url}}/service-options" }
+          }
+        },
+        {
+          "name": "Get All Service Options",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ],
+            "url": { "raw": "{{base_url}}/service-options" }
+          }
+        },
+        {
+          "name": "Get Service Option by ID",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ],
+            "url": { "raw": "{{base_url}}/service-options/:id" }
+          }
+        },
+        {
+          "name": "Update Service Option",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"extraPrice\":6.0}" },
+            "url": { "raw": "{{base_url}}/service-options/:id" }
+          }
+        },
+        {
+          "name": "Delete Service Option",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ],
+            "url": { "raw": "{{base_url}}/service-options/:id" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pricing",
+      "item": [
+        {
+          "name": "Calculate Price",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\"serviceId\":\"uuid-de-servicio\",\"area\":120,\"optionIds\":[\"uuid-opcion1\",\"uuid-opcion2\"],\"region\":\"NORTH\"}" },
+            "url": { "raw": "{{base_url}}/pricing/calculate" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"items\":[{\"serviceId\":\"uuid-servicio\",\"area\":100,\"optionIds\":[\"uuid-op1\"]}]}"
+            },
+            "url": { "raw": "{{base_url}}/projects" }
+          }
+        },
+        {
+          "name": "Get All Projects",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ],
+            "url": { "raw": "{{base_url}}/projects" }
+          }
+        },
+        {
+          "name": "Get Project by ID",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ],
+            "url": { "raw": "{{base_url}}/projects/:id" }
+          }
+        },
+        {
+          "name": "Update Project Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"status\":\"APPROVED\"}" },
+            "url": { "raw": "{{base_url}}/projects/:id/status" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Scheduling",
+      "item": [
+        {
+          "name": "Create Team",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"name\":\"Equipo A\",\"capacity\":2}" },
+            "url": { "raw": "{{base_url}}/teams" }
+          }
+        },
+        {
+          "name": "Get All Teams",
+          "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ], "url": { "raw": "{{base_url}}/teams" } }
+        },
+        {
+          "name": "Get Team by ID",
+          "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ], "url": { "raw": "{{base_url}}/teams/:id" } }
+        },
+        {
+          "name": "Update Team",
+          "request": { "method": "PATCH", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ], "body": { "mode": "raw", "raw": "{\"capacity\":3}" }, "url": { "raw": "{{base_url}}/teams/:id" } }
+        },
+        {
+          "name": "Delete Team",
+          "request": { "method": "DELETE", "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ], "url": { "raw": "{{base_url}}/teams/:id" } }
+        },
+        {
+          "name": "Get Availability",
+          "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ], "url": { "raw": "{{base_url}}/scheduling/availability?date=2025-06-15" } }
+        },
+        {
+          "name": "Schedule Project",
+          "request": { "method": "POST", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ], "body": { "mode": "raw", "raw": "{\"projectId\":\"uuid-proyecto\",\"teamId\":\"uuid-equipo\",\"startTime\":\"2025-06-16T09:00:00Z\",\"endTime\":\"2025-06-16T11:00:00Z\"}" }, "url": { "raw": "{{base_url}}/scheduling/schedule" } }
+        },
+        {
+          "name": "Reschedule Project",
+          "request": { "method": "PATCH", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ], "body": { "mode": "raw", "raw": "{\"startTime\":\"2025-06-16T12:00:00Z\",\"endTime\":\"2025-06-16T14:00:00Z\"}" }, "url": { "raw": "{{base_url}}/scheduling/schedule/:id/reschedule" } }
+        },
+        {
+          "name": "Cancel Scheduled Project",
+          "request": { "method": "DELETE", "header": [ { "key": "Authorization", "value": "Bearer {{jwt_token}}" } ], "url": { "raw": "{{base_url}}/scheduling/schedule/:id" } }
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Create Payment Intent",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"projectId\":\"uuid-del-proyecto\",\"amount\":100.50,\"currency\":\"usd\"}"
+            },
+            "url": { "raw": "{{base_url}}/payments/create-intent" }
+          }
+        },
+        {
+          "name": "Handle Stripe Webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "stripe-signature", "value": "{{stripe_signature}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"type\":\"payment_intent.succeeded\",\"data\":{\"object\":{\"id\":\"pi_123\",\"metadata\":{\"paymentId\":\"uuid-payment\",\"projectId\":\"uuid-project\"}}}}"
+            },
+            "url": { "raw": "{{base_url}}/payments/webhook" }
+          }
+        },
+        {
+          "name": "Get Payments by Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/payments/project/:projectId" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contracts",
+      "item": [
+        {
+          "name": "Generate Contract",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"projectId\":\"uuid-del-proyecto\"}"
+            },
+            "url": { "raw": "{{base_url}}/contracts" }
+          }
+        },
+        {
+          "name": "Get Contract",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/contracts/:id" }
+          }
+        },
+        {
+          "name": "Sign Contract",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"signature\":\"base64-o-url-o-texto\"}"
+            },
+           "url": { "raw": "{{base_url}}/contracts/:id/sign" }
+          }
+        },
+        {
+          "name": "Send Contract",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"recipientName\": \"Juan Pérez\", \"recipientEmail\": \"juan.perez@example.com\", \"returnUrl\": \"http://localhost:3000/return\" }"
+            },
+            "url": { "raw": "{{base_url}}/contracts/:id/send" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Field Operations",
+      "item": [
+        {
+          "name": "Upload Project Photo",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"projectId\":\"uuid-del-proyecto\",\"url\":\"https://.../foto.jpg\",\"description\":\"Foto del avance del proyecto\"}"
+            },
+            "url": { "raw": "{{base_url}}/field-ops/photos" }
+          }
+        },
+        {
+          "name": "List Project Photos",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/field-ops/photos/:projectId" }
+          }
+        }
+      ]
+    }
+  ]
+}
